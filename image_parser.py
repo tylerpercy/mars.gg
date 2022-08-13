@@ -14,7 +14,7 @@ def main():
 
     for iter in range (-1, 3):
         current_player_stats = []
-        image_black_and_white('images\\test2.png')
+        image_black_and_white('images\\test3.png')
         crop_full_image('images\\output.png', iter)
 
         name = crop_player_name('images\\output_crop.png')
@@ -33,7 +33,11 @@ def main():
         
         all_player_stats.append(current_player_stats)
 
-    print(all_player_stats)
+    for l in all_player_stats:
+        print(l)
+
+        # DETECTED 32 as 2 - THARSIS REPUBLIC TEST3.png
+
 
 def image_black_and_white(image):
     img = Image.open(image)
