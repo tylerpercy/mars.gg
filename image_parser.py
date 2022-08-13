@@ -14,21 +14,21 @@ def main():
 
     for iter in range (-1, 3):
         current_player_stats = []
-        image_black_and_white('test2.png')
-        crop_full_image('output.png', iter)
+        image_black_and_white('images\\test2.png')
+        crop_full_image('images\\output.png', iter)
 
-        name = crop_player_name('output_crop.png')
+        name = crop_player_name('images\\output_crop.png')
         if name == 'X':
             continue
         else:
             current_player_stats.append(name)
 
-        text_value = crop_player_stat('output_crop.png', 300, 420)
+        text_value = crop_player_stat('images\\output_crop.png', 300, 420)
         current_player_stats.append(text_value)
 
         
         for i in range(0, 6):
-            text_value = crop_player_stat('output_crop.png', (540 + (270 * i)), (690 + (270 * i)))
+            text_value = crop_player_stat('images\\output_crop.png', (540 + (270 * i)), (690 + (270 * i)))
             current_player_stats.append(text_value)
         
         all_player_stats.append(current_player_stats)
@@ -42,7 +42,7 @@ def image_black_and_white(image):
     converted = np.where(data == 255, 0, 255)
 
     img = Image.fromarray(converted.astype('uint8'))
-    img.save('output.png')
+    img.save('images\\output.png')
 
 def add_image_filters(input_image, output_image, scale):
 
@@ -104,7 +104,7 @@ def crop_full_image(image, iter):
     bottom = 625  + (iter * VERTICAL_OFFSET)
 
     img = img.crop((left, top, right, bottom))
-    img.save('output_crop.png')  
+    img.save('images\\output_crop.png')  
 
 def crop_player_name(image):
     img = Image.open(image)
@@ -114,9 +114,9 @@ def crop_player_name(image):
     player_name_bottom = 85
 
     player_name = img.crop((player_name_left, player_name_top, player_name_right, player_name_bottom))
-    player_name.save('player_name.png')
+    player_name.save('images\\player_name.png')
 
-    name = parse_image_text('player_name.png', 'player_name.png', 100, False)[0]
+    name = parse_image_text('images\\player_name.png', 'images\\player_name.png', 100, False)[0]
     return name
  
 def crop_player_stat(image, num_left, num_right):
@@ -142,13 +142,13 @@ def crop_player_stat(image, num_left, num_right):
     number_bottom = 160
    
     number_value = img.crop((number_left, number_top, number_right, number_bottom))
-    number_value.save('number_value.png')
+    number_value.save('images\\number_value.png')
 
-    image_scale_100 = parse_image_text('number_value.png', 'number_value_100.png', 100, True) 
-    image_scale_400 = parse_image_text('number_value.png', 'number_value_400.png', 150, True)
-    image_scale_200 = parse_image_text('number_value.png', 'number_value_200.png', 200, True)
-    image_scale_400 = parse_image_text('number_value.png', 'number_value_400.png', 300, True)
-    image_scale_400 = parse_image_text('number_value.png', 'number_value_400.png', 400, True)
+    image_scale_100 = parse_image_text('images\\number_value.png', 'images\\number_value_100.png', 100, True) 
+    image_scale_400 = parse_image_text('images\\number_value.png', 'images\\number_value_400.png', 150, True)
+    image_scale_200 = parse_image_text('images\\number_value.png', 'images\\number_value_200.png', 200, True)
+    image_scale_400 = parse_image_text('images\\number_value.png', 'images\\number_value_400.png', 300, True)
+    image_scale_400 = parse_image_text('images\\number_value.png', 'images\\number_value_400.png', 400, True)
 
     if image_scale_100[1] > image_scale_200[1] and image_scale_100[1] > image_scale_400[1]:
         best_match = image_scale_100[0]
