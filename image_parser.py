@@ -145,22 +145,18 @@ def crop_player_stat(image, num_left, num_right):
     number_value.save('images\\number_value.png')
 
     image_scale_100 = parse_image_text('images\\number_value.png', 'images\\number_value_100.png', 100, True) 
-    image_scale_400 = parse_image_text('images\\number_value.png', 'images\\number_value_400.png', 150, True)
+    image_scale_150 = parse_image_text('images\\number_value.png', 'images\\number_value_150.png', 150, True)
     image_scale_200 = parse_image_text('images\\number_value.png', 'images\\number_value_200.png', 200, True)
-    image_scale_400 = parse_image_text('images\\number_value.png', 'images\\number_value_400.png', 300, True)
+    image_scale_300 = parse_image_text('images\\number_value.png', 'images\\number_value_300.png', 300, True)
     image_scale_400 = parse_image_text('images\\number_value.png', 'images\\number_value_400.png', 400, True)
 
-    if image_scale_100[1] > image_scale_200[1] and image_scale_100[1] > image_scale_400[1]:
-        best_match = image_scale_100[0]
-        print("Highest confidence is {} with image scaling 100.".format(image_scale_100[1]))
-    elif image_scale_200[1] > image_scale_400[1]:
-        best_match = image_scale_200[0]
-        print("Highest confidence is {} with image scaling 200.".format(image_scale_200[1]))
-    else:
-        best_match = image_scale_400[0]
-        print("Highest confidence is {} with image scaling 400.".format(image_scale_400[1]))
-    
-    return best_match
+    image_confidence_list = [image_scale_100, image_scale_150, image_scale_200, image_scale_300, image_scale_400]
+    image_confidence_list.sort(key= lambda x: x[1])
+    best_match = image_confidence_list[-1]
+
+    print("Highest confidence is {}, selecting value '{}'.".format(best_match[1], best_match[0]))
+
+    return best_match[0]
     
 def parse_image_text(input_image, output_image, scale, number_parse):
    
