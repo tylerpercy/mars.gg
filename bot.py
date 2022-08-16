@@ -1,6 +1,7 @@
 import os
 import sqlite3
 import discord
+from image_parser import image_parser
 from dotenv import find_dotenv, load_dotenv
 from discord.ext import commands
 
