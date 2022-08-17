@@ -35,6 +35,7 @@ class image_parser():
                 continue    # so if it can't find a name we want to end this iteration of the loop
             else:
                 current_player_stats.append(name)
+                current_player_stats.append(iter+2)
 
             # first stat scrape is hardcoded since playernames sometimes extended out and messed up the value using the loop values
             if origin == MOBILE:
@@ -56,14 +57,15 @@ class image_parser():
                     current_player_stats.append(text_value)
         
             # stats from the current iteration of the loop are added to a list that will contain every player's stats. 
-            if len(current_player_stats) != 8:
+            if len(current_player_stats) != 9:
                 print("Image not recognized as a valid Terraforming Mars Screenshot.")
                 current_player_stats = []
                 self.all_player_stats = []
-                break
-            else:
+                return -1
+            else: # might need to return this in order to add to database
                 self.all_player_stats.append(current_player_stats)
 
+        # useless after database integration
         for stat_list in self.all_player_stats:
             print(stat_list)
 
@@ -298,6 +300,3 @@ class image_parser():
         images = glob.glob('images\\*.png')
         for img in images:
             os.remove(img)
-
-
-          

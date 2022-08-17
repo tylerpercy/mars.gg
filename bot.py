@@ -52,14 +52,19 @@ async def on_message(message):
                 print("Image origin detection successful.")
 
             try:
-                ip.parse(image, ip.origin)
+                return_code = ip.parse(image, ip.origin)
             except:
                 await client.get_channel(CHANNEL_ID).send("Error has occurred with data parsing.")
                 print("Error has occurred with data parsing.")
                 err_cnt += 1
             else:
-                await client.get_channel(CHANNEL_ID).send("Data parsing successful.")
-                print("Data parsing successful.")
+                if return_code == -1:
+                    await client.get_channel(CHANNEL_ID).send("Error has occurred with data parsing.")
+                    print("Error has occurred with data parsing.")
+                    err_cnt += 1
+                else:
+                    await client.get_channel(CHANNEL_ID).send("Data parsing successful.")
+                    print("Data parsing successful.")
 
             try:
                 ip.clean() # remove all .pngs
