@@ -1,15 +1,18 @@
 from PIL import Image, ImageFilter
-from PIL.ExifTags import TAGS
+import os
+import glob
 import cv2 as cv
 import numpy as np
 import easyocr
 import warnings
+import requests
+import shutil
 
 warnings.filterwarnings("ignore", category=UserWarning) 
 MOBILE = 'MOBILE'
 DESKTOP = 'DESKTOP'
 
-class image_parser:
+class image_parser():
 
     all_player_stats = []
 
@@ -62,11 +65,21 @@ class image_parser:
         for stat_list in self.all_player_stats:
             print(stat_list)
 
+    def download_image(self, image): 
+        r = requests.get(image, stream=True)
+        if r.status_code == 200:
+            with open("images\\match.png", 'wb') as f:
+                r.raw.decode_content = True
+                shutil.copyfileobj(r.raw, f)
+
+            return "images\\match.png"
+      
     def detect_origin(self, image):
-        desktop_number = 1.7778
         img = Image.open(image)
+        # get resolution
         width, height = img.size
 
+        # checks if image is 16:9 or 16:10 aspect ratio (if it is, it came from a desktop)
         if ((round((width / height), 4) == 1.7778) or (round((width / height), 4) == 1.6000)):
             self.origin = DESKTOP
         else:
@@ -89,6 +102,7 @@ class image_parser:
             # standardize image to iphone12 resolution
             img = cv.resize(img, (2532, 1170))
         else:
+            # standarize image to 1920x1080 desktop resolution
             img = cv.resize(img, (1920, 1080))
 
         cv.imwrite('images\\output.png', img)
@@ -178,7 +192,6 @@ class image_parser:
 
         if (origin == DESKTOP):
             name = self.parse_image_text('images\\player_name.png', 'images\\player_name.png', 100, False, True)[0]
-            print(name)
         else:
             name = self.parse_image_text('images\\player_name.png', 'images\\player_name.png', 100, False)[0]
 
@@ -247,7 +260,7 @@ class image_parser:
         image_confidence_list.sort(key= lambda x: x[1])
         best_match = image_confidence_list[-1]
 
-        print("Highest confidence is {}, selecting value '{}'.".format(best_match[1], best_match[0]))
+        # print("Highest confidence is {}, selecting value '{}'.".format(best_match[1], best_match[0]))
 
         # returns value with highest confidence
         return best_match[0]
@@ -277,10 +290,12 @@ class image_parser:
         except:
             return ['X', float('0')]
         else:
-            return [text_value, text_confidence]   
+            return [text_value, text_confidence]
+        
+    def clean(self):
+        images = glob.glob('images\\*.png')
+        for img in images:
+            os.remove(img)
 
-ip = image_parser()
 
-ip.detect_origin('images\\test5.png')
-ip.parse('images\\test5.png', ip.origin)
           
