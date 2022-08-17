@@ -26,32 +26,57 @@ async def on_message(message):
             await client.get_channel(CHANNEL_ID).send("Screenshot detected.")
             link = str(message.attachments[0])
 
+            err_cnt = 0
+
             #create parser object
             ip = image_parser()
+
             try:
                 image = ip.download_image(link)
             except:
-                await client.get_channel(CHANNEL_ID).send("Image download not successful.")
-                print("Image download not successful.")
+                await client.get_channel(CHANNEL_ID).send("Image download failed.")
+                print("Image download failed.")
+                err_cnt += 1
             else:
                 await client.get_channel(CHANNEL_ID).send("File download successful.")
                 print("File download successful.")
+
             try:
                 ip.detect_origin(image)
             except:
                 await client.get_channel(CHANNEL_ID).send("No image found.")
                 print("No image found.")
+                err_cnt += 1
             else:
                 await client.get_channel(CHANNEL_ID).send("Image origin detection successful.")
                 print("Image origin detection successful.")
+
+            try:
                 ip.parse(image, ip.origin)
-            finally:
+            except:
+                await client.get_channel(CHANNEL_ID).send("Error has occurred with data parsing.")
+                print("Error has occurred with data parsing.")
+                err_cnt += 1
+            else:
+                await client.get_channel(CHANNEL_ID).send("Data parsing successful.")
+                print("Data parsing successful.")
+
+            try:
                 ip.clean() # remove all .pngs
+            except:
+                await client.get_channel(CHANNEL_ID).send("Clean failed.")
+                print("Clean failed.")
+                err_cnt += 1
+            else:
                 await client.get_channel(CHANNEL_ID).send("Clean successful.")
                 print("Clean successful.")
-
-                await client.get_channel(CHANNEL_ID).send("\nOperation successful.")
-                print("\nOperation successful.")
+            
+            if err_cnt == 0:
+                await client.get_channel(CHANNEL_ID).send("\nAll operations successful.")
+                print("\nAll operations successful.")
+            else:
+                await client.get_channel(CHANNEL_ID).send(f"\n{err_cnt} error(s) occurred.")
+                print(f"\n{err_cnt} error(s) occurred.")
 
 try:
    client.run(TOKEN)

@@ -45,6 +45,8 @@ class image_parser():
                 for i in range(0, 6):
                     text_value = self.crop_player_stat('images\\output_crop.png', (540 + (270 * i)), (690 + (270 * i)), origin)
                     current_player_stats.append(text_value)
+
+            # DESKTOP VERSION OF ABOVE
             else:
                 text_value = self.crop_player_stat('images\\output_crop.png', 380, 460, origin)
                 current_player_stats.append(text_value)

@@ -1,0 +1,7 @@
+discord.py==1.7.3
+easyocr==1.5.0
+numpy==1.23.1
+opencv_python_headless==4.5.4.60
+Pillow==9.2.0
+python-dotenv==0.20.0
+requests==2.28.1
